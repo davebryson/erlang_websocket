@@ -1,0 +1,59 @@
+h2. Erlang WebSocket wrapper for "MochiWeb":http://code.google.com/p/mochiweb/
+
+This is a simple wrapper around the mochiweb_socket_server to allow "WebSocket":http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-66 connections.  With this wrapper, you can write WebSocket connection loops just like you'd write a normal mochiweb application.  Here's an example included with the source code:
+
+<pre>
+ <code>
+-module(basic_websocket).
+
+-export([start/1, stop/0, loop/1]).
+
+start(Options) ->
+    Loop = fun (WebSocket) ->
+                   ?MODULE:loop(WebSocket)
+           end,
+    mochiweb_websocket:start([{name, ?MODULE}, {loop, Loop} | Options]).
+
+stop() ->
+    mochiweb_websocket:stop(?MODULE).
+
+
+loop(WebSocket) ->
+    %% Get the data sent from the client
+    Data = WebSocket:get_data(),
+    
+    %% For this example...
+    %% Of course you could handle JSON or another format of your choice
+    case Data of
+	%% On initial connect we get this message
+	"client-connected" ->
+	    WebSocket:send("You are connected!");
+	%% Other messages go here
+	Other ->
+	    Msg = "You Said: " ++ Other,
+	    WebSocket:send(Msg)
+    end.
+ </code>
+</pre> 
+
+h3. Requirements:
+ 
+ # Erlang 12.5 or greater
+ # Google Chrome Browser developer channel release 4.0.249.0
+
+
+h3. Getting Started:
+ 
+ # download the code
+ # CD into the erlang_websocket directory
+ # run make
+
+h3. Run the example:
+
+ # CD into the examples/basic directory
+ # run the 'start.sh' script
+ # Point the Chrome Browser to 'http://localhost:8000'
+
+
+    
+ 
