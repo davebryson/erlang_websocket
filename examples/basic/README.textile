@@ -1,0 +1,14 @@
+h2. To run the client
+
+ # Make sure the server is running
+ # in a terminal run "./start_client.sh"
+ # Once the Erlang shell starts, run the following commands:
+
+<pre>
+ <code>
+  > sample_client:start().
+  > sample_client:send("Hello there!").
+  > sample_client:close().
+ </code>
+</pre>
+   
