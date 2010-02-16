@@ -1,6 +1,6 @@
 -module(sample_client).
 
--behaviour(websocket).
+-behaviour(websocket_client).
 
 -export([start/0]).
 
