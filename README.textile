@@ -1,6 +1,9 @@
-h2. Erlang WebSocket wrapper for "MochiWeb":http://code.google.com/p/mochiweb/
+h2. Erlang WebSocket Server and Client
 
-This is a simple wrapper around the mochiweb_socket_server to allow "WebSocket":http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-66 connections.  With this wrapper, you can write WebSocket connection loops just like you'd write a normal mochiweb application.  Here's an example included with the source code:
+
+h3. WebSocket Server
+
+The server is a simple wrapper around the mochiweb_socket_server to allow "WebSocket":http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-66 connections.  With this wrapper, you can write WebSocket connection loops just like you'd write a normal mochiweb application.  Here's an example (included with the source code):
 
 <pre>
  <code>
@@ -35,6 +38,55 @@ loop(WebSocket) ->
     end.
  </code>
 </pre> 
+
+h3. WebSocket Client
+
+This is a pure Erlang WebSocket client you can use to call a WebSocket Server from Erlang code. For simplicity, the code
+defines an Erlang Behaviour you implement for you client. The Behaviour defines the functions outlined in the WebSocket API spec.  Here's an example of a simple client:
+
+<pre>
+ <code>
+
+-module(sample).
+-behaviour(websocket).
+-export([start/0]).
+%% websocket specific callbacks
+-export([onmessage/1,onopen/0,onclose/0,close/0,send/1]).
+
+send(Data) ->
+    websocket_client:write(Data).
+
+start() ->
+    websocket_client:start("localhost",8002,?MODULE).
+
+%% Handle incoming messages here
+onmessage(Data) ->
+    io:format("Got some data:: ~p~n",[Data]).
+
+onclose() ->
+    io:format("Connection closed~n").
+
+onopen() ->
+    io:format("Connection open~n"),
+    send("client-connected").
+
+close() ->
+    websocket_client:close().
+
+ </code>
+</pre>
+
+Here's an example of using the client from an erl shell:
+
+<pre>
+ <code>
+> sample:start().
+> sample:send("Hello there").
+> sample:close().
+ </code>
+</pre>
+
+Check out the examples directory. 
 
 h3. Requirements:
  

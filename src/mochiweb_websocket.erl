@@ -67,7 +67,8 @@ handshake(Socket,MyLoop) ->
             handshake(Socket, MyLoop);
         {error, {http_error, "\n"}} ->
             handshake(Socket, MyLoop);
-        _Other ->
+        Other ->
+	    io:format("Got: ~p~n",[Other]),
             gen_tcp:close(Socket),
             exit(normal)
     end.
