@@ -41,8 +41,7 @@ loop(WebSocket) ->
 
 h3. WebSocket Client
 
-This is a pure Erlang WebSocket client you can use to call a WebSocket Server from Erlang code. For simplicity, the code
-defines an Erlang Behaviour you implement for you client. The Behaviour defines the functions outlined in the WebSocket API spec.  Here's an example of a simple client:
+This is a pure Erlang WebSocket client you can use to call a WebSocket Server from Erlang code. For simplicity, the code defines an Erlang Behaviour you implement for your client. The Behaviour defines the functions outlined in the WebSocket API spec.  Here's an example of a simple client:
 
 <pre>
  <code>
