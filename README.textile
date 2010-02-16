@@ -48,7 +48,7 @@ defines an Erlang Behaviour you implement for you client. The Behaviour defines 
  <code>
 
 -module(sample).
--behaviour(websocket).
+-behaviour(websocket_client).
 -export([start/0]).
 %% websocket specific callbacks
 -export([onmessage/1,onopen/0,onclose/0,close/0,send/1]).
