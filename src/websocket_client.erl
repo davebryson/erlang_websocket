@@ -13,7 +13,7 @@
 -behaviour(gen_server).
 
 %% API
--export([start/3,write/1,close/0]).
+-export([start/3,start/4,write/1,close/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -35,15 +35,17 @@ behaviour_info(_) ->
 -record(state, {socket,readystate=undefined,headers=[],callback}).
 
 start(Host,Port,Mod) ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, [{Host,Port,Mod}], []).
+  start(Host,Port,"/",Mod).
+  
+start(Host,Port,Path,Mod) ->
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [{Host,Port,Path,Mod}], []).
 
 init(Args) ->
     process_flag(trap_exit,true),
-    [{Host,Port,Mod}] = Args,
+    [{Host,Port,Path,Mod}] = Args,
     {ok, Sock} = gen_tcp:connect(Host,Port,[binary,{packet, 0},{active,true}]),
     
-    %% Hardcoded path for now...
-    Req = initial_request(Host,"/"),
+    Req = initial_request(Host,Path),
     ok = gen_tcp:send(Sock,Req),
     inet:setopts(Sock, [{packet, http}]),
     
